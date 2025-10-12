@@ -12,8 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('oglas', function (Blueprint $table) {
-            $table->id();
+            $table->id('oglasID');
+            $table->date('datumKreiranja');
+            $table->date('datumIsteka');
+            $table->float('cenaIstaknutogOglasa');
+            $table->unsignedBigInteger('voziloID');
+            $table->unsignedBigInteger('korisnikID');
+            $table->enum('statusOglasa', ['istaknutiOglas', 'standardniOglas', 'deaktiviranOglas', 'istekaoOglas']);
             $table->timestamps();
+            
+            $table->foreign('voziloID')->references('voziloID')->on('vozilo')->onDelete('cascade');
+            $table->foreign('korisnikID')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

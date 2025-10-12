@@ -14,6 +14,11 @@ class izvestaj extends Model
     protected $table = 'izvestaj';
     protected $primaryKey = 'izvestajID';
     protected $fillable = ['brojUplata', 'datumOd', 'datumDo'];
+    
+    protected $casts = [
+        'datumOd' => 'date',
+        'datumDo' => 'date'
+    ];
 
     public function oglasi() {
         return $this->belongsToMany(Oglas::class, 'izvestaj_oglas', 'izvestajID', 'oglasID');

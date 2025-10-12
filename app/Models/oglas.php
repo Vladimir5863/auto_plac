@@ -13,13 +13,13 @@ class oglas extends Model
     protected $table = 'oglas';
     protected $primaryKey = 'oglasID';
     protected $fillable = [
-        'datumKreiranja', 'datumIsteka', 'cenaIstatknutogOglasa',
+        'datumKreiranja', 'datumIsteka', 'cenaIstaknutogOglasa',
         'voziloID', 'korisnikID', 'statusOglasa'
     ];
     protected $casts = [
         'datumKreiranja' => 'date',
         'datumIsteka' => 'date',
-        'cenaIstatknutogOglasa' => 'float'
+        'cenaIstaknutogOglasa' => 'float'
     ];
 
     public function korisnik() {
