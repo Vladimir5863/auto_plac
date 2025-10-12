@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Auto Plac')</title>
+    <title>Auto Plac</title>
+    <!-- SVG favicon (car icon) -->
+    <link rel="icon" type="image/svg+xml" href='data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"%3E%3Crect width="64" height="64" rx="12" fill="%237c3aed"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-size="34"%3E%F0%9F%9A%97%3C/text%3E%3C/svg%3E'>
+    <!-- ICO fallback -->
+    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -12,6 +16,18 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
     <style>
+        :root {
+            --bs-primary: #a78bfa; /* light purple */
+            --bs-primary-rgb: 167, 139, 250;
+            --bs-link-color: #7c6ee6;
+            --bs-link-hover-color: #6b5edb;
+        }
+        body {
+            background-color: #f7f5ff;
+        }
+        .bg-purple {
+            background: linear-gradient(135deg, #7c3aed, #6d28d9);
+        }
         .navbar-brand {
             font-weight: bold;
             font-size: 1.5rem;
@@ -21,14 +37,14 @@
             transition: color 0.3s ease;
         }
         .nav-link:hover {
-            color: #007bff !important;
+            color: var(--bs-primary) !important;
         }
         .dropdown-menu {
             border: none;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         .dropdown-item:hover {
-            background-color: #f8f9fa;
+            background-color: #f1edff;
         }
         .badge {
             font-size: 0.75rem;
@@ -37,11 +53,65 @@
             color: #6c757d;
             font-size: 0.9rem;
         }
+        .btn-primary {
+            background-color: var(--bs-primary);
+            border-color: var(--bs-primary);
+        }
+        .btn-primary:hover {
+            filter: brightness(0.95);
+        }
+        .btn-outline-primary {
+            color: var(--bs-primary);
+            border-color: var(--bs-primary);
+        }
+        .btn-outline-primary:hover {
+            background-color: var(--bs-primary);
+            color: #fff;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: rgba(var(--bs-primary-rgb), 1);
+            box-shadow: 0 0 0 .2rem rgba(var(--bs-primary-rgb), .25);
+        }
+        /* Tweak Chrome autofill yellow */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
+        textarea:-webkit-autofill,
+        textarea:-webkit-autofill:hover,
+        textarea:-webkit-autofill:focus,
+        select:-webkit-autofill,
+        select:-webkit-autofill:hover,
+        select:-webkit-autofill:focus {
+            -webkit-text-fill-color: #212529;
+            transition: background-color 5000s ease-in-out 0s;
+            box-shadow: 0 0 0px 1000px #fff inset;
+        }
+        .card {
+            border: none;
+            border-radius: .75rem;
+        }
+        .card-header {
+            border-top-left-radius: .75rem !important;
+            border-top-right-radius: .75rem !important;
+        }
+        /* Admin tables: align actions column baseline */
+        table .actions { white-space: nowrap; }
+        table td.actions, table th.actions { vertical-align: middle; padding-top: .75rem; padding-bottom: .75rem; }
+        table td.actions form { display: inline-block; margin: 0; }
+        table td.actions .btn { vertical-align: middle; }
+        /* Sticky footer: body as flex column */
+        html, body { height: 100%; }
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        main.site-main { flex: 1 0 auto; }
     </style>
 </head>
 <body>
     <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-purple sticky-top">
         <div class="container">
             <!-- Brand -->
             <a class="navbar-brand" href="{{ route('home') }}">
@@ -58,47 +128,37 @@
                 <ul class="navbar-nav me-auto">
                     <!-- Home -->
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('home') }}">
+                        <a class="nav-link {{ request()->is('/') ? 'active' : '' }}" href="{{ route('home') }}">
                             <i class="fas fa-home me-1"></i>Početna
                         </a>
                     </li>
 
-                    <!-- Oglasi -->
+                    <!-- Sva vozila -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('vehicles.index') }}">
+                            Sva vozila
+                        </a>
+                    </li>
+
+                    <!-- Moji oglasi (submenu) -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-list me-1"></i>Oglasi
+                            <i class="fas fa-list me-1"></i>Moji oglasi
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ route('oglasi.index') }}">
+                            <li><a class="dropdown-item" href="{{ route('ads.index') }}">
                                 <i class="fas fa-list me-2"></i>Svi oglasi
                             </a></li>
-                            <li><a class="dropdown-item" href="{{ route('oglasi.create') }}">
-                                <i class="fas fa-plus me-2"></i>Dodaj oglas
-                            </a></li>
-                            <li><a class="dropdown-item" href="{{ route('oglasi.featured') }}">
+                            <li><a class="dropdown-item" href="{{ route('ads.featured') }}">
                                 <i class="fas fa-star me-2"></i>Istaknuti oglasi
+                            </a></li>
+                            <li><a class="dropdown-item" href="{{ route('ads.create') }}">
+                                <i class="fas fa-plus me-2"></i>Kreiraj oglas
                             </a></li>
                         </ul>
                     </li>
 
-                    <!-- Vozila -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-car me-1"></i>Vozila
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ route('vozila.index') }}">
-                                <i class="fas fa-list me-2"></i>Sva vozila
-                            </a></li>
-                            <li><a class="dropdown-item" href="{{ route('vozila.create') }}">
-                                <i class="fas fa-plus me-2"></i>Dodaj vozilo
-                            </a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{{ route('vozila.search') }}">
-                                <i class="fas fa-search me-2"></i>Pretraži vozila
-                            </a></li>
-                        </ul>
-                    </li>
+                    
 
                     <!-- Uplate -->
                     <li class="nav-item">
@@ -107,64 +167,37 @@
                         </a>
                     </li>
 
-                    <!-- Izveštaji -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-chart-bar me-1"></i>Izveštaji
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ route('izvestaji.index') }}">
-                                <i class="fas fa-list me-2"></i>Svi izveštaji
-                            </a></li>
-                            <li><a class="dropdown-item" href="{{ route('izvestaji.create') }}">
-                                <i class="fas fa-plus me-2"></i>Novi izveštaj
-                            </a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{{ route('izvestaji.monthly') }}">
-                                <i class="fas fa-calendar me-2"></i>Mesečni izveštaj
-                            </a></li>
-                        </ul>
-                    </li>
+                    <!-- Admin (only for admin users) -->
+                    @auth
+                        @if(Auth::user()->tipKorisnika === 'admin')
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('admin.dashboard') }}">
+                                    <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                                </a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                    <i class="fas fa-chart-bar me-1"></i>Izveštaji
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="{{ route('izvestaji.index') }}">
+                                        <i class="fas fa-list me-2"></i>Svi izveštaji
+                                    </a></li>
+                                    <li><a class="dropdown-item" href="{{ route('izvestaji.create') }}">
+                                        <i class="fas fa-plus me-2"></i>Novi izveštaj
+                                    </a>
+                                </ul>
+                            </li>
+                        @endif
+                    @endauth
                 </ul>
 
                 <!-- Right Side Navigation -->
                 <ul class="navbar-nav">
-                    <!-- Search -->
-                    <li class="nav-item">
-                        <form class="d-flex" action="{{ route('search') }}" method="GET">
-                            <input class="form-control me-2" type="search" name="q" placeholder="Pretraži..." style="width: 200px;">
-                            <button class="btn btn-outline-light" type="submit">
-                                <i class="fas fa-search"></i>
-                            </button>
-                        </form>
-                    </li>
-
-                    <!-- Notifications -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link position-relative" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-bell"></i>
-                            <span class="badge bg-danger position-absolute top-0 start-100 translate-middle rounded-pill">3</span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><h6 class="dropdown-header">Obaveštenja</h6></li>
-                            <li><a class="dropdown-item" href="#">
-                                <i class="fas fa-star text-warning me-2"></i>Novi istaknuti oglas
-                            </a></li>
-                            <li><a class="dropdown-item" href="#">
-                                <i class="fas fa-credit-card text-success me-2"></i>Uplata primljena
-                            </a></li>
-                            <li><a class="dropdown-item" href="#">
-                                <i class="fas fa-exclamation-triangle text-warning me-2"></i>Oglas ističe uskoro
-                            </a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-center" href="#">Prikaži sva obaveštenja</a></li>
-                        </ul>
-                    </li>
 
                     <!-- User Menu -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-user-circle me-2"></i>
                             <span class="user-info">
                                 @auth
                                     {{ Auth::user()->korisnickoIme ?? 'Korisnik' }}
@@ -185,9 +218,8 @@
                                 <li><a class="dropdown-item" href="{{ route('uplate.my') }}">
                                     <i class="fas fa-credit-card me-2"></i>Moje uplate
                                 </a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="{{ route('settings') }}">
-                                    <i class="fas fa-cog me-2"></i>Podešavanja
+                                <li><a class="dropdown-item" href="{{ route('profile.purchases') }}">
+                                    <i class="fas fa-shopping-bag me-2"></i>Kupljena vozila
                                 </a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
@@ -214,7 +246,7 @@
     </nav>
 
     <!-- Main Content -->
-    <main class="container-fluid py-4">
+    <main class="container-fluid py-4 site-main">
         <!-- Flash Messages -->
         @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -293,5 +325,6 @@
     </script>
 
     @yield('scripts')
+    @stack('scripts')
 </body>
 </html>

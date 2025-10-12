@@ -7,7 +7,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6">
             <div class="card shadow-lg border-0">
-                <div class="card-header bg-success text-white text-center py-4">
+                <div class="card-header bg-purple text-white text-center py-4">
                     <h3 class="mb-0">
                         <i class="fas fa-user-plus me-2"></i>Registracija
                     </h3>
@@ -78,32 +78,6 @@
                                 @enderror
                             </div>
 
-                            <!-- Tip korisnika -->
-                            <div class="col-md-6 mb-3">
-                                <label for="tipKorisnika" class="form-label">
-                                    <i class="fas fa-user-tag me-1"></i>Tip korisnika *
-                                </label>
-                                <select class="form-select @error('tipKorisnika') is-invalid @enderror" 
-                                        id="tipKorisnika" 
-                                        name="tipKorisnika" 
-                                        required>
-                                    <option value="">Izaberite tip korisnika</option>
-                                    <option value="korisnik" {{ old('tipKorisnika') == 'korisnik' ? 'selected' : '' }}>
-                                        Korisnik
-                                    </option>
-                                    <option value="moderator" {{ old('tipKorisnika') == 'moderator' ? 'selected' : '' }}>
-                                        Moderator
-                                    </option>
-                                    <option value="admin" {{ old('tipKorisnika') == 'admin' ? 'selected' : '' }}>
-                                        Administrator
-                                    </option>
-                                </select>
-                                @error('tipKorisnika')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
                         </div>
 
                         <div class="row">
@@ -163,7 +137,7 @@
 
                         <!-- Submit button -->
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-success btn-lg">
+                            <button type="submit" class="btn btn-primary btn-lg">
                                 <i class="fas fa-user-plus me-2"></i>Registruj se
                             </button>
                         </div>

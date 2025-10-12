@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class izvestaj_oglas extends Pivot
+class izvestaj_oglas extends Model
 {
     /**
      * The table associated with the model.
@@ -20,19 +21,21 @@ class izvestaj_oglas extends Pivot
      */
     public $timestamps = false;
 
+    use SoftDeletes;
+
     /**
      * Indicates if the IDs are auto-incrementing.
      *
      * @var bool
      */
-    public $incrementing = false;
+    public $incrementing = true;
 
     /**
      * The primary key associated with the table.
      *
      * @var array
      */
-    protected $primaryKey = ['izvestajID', 'oglasID'];
+    protected $primaryKey = 'id';
 
     /**
      * The attributes that are mass assignable.

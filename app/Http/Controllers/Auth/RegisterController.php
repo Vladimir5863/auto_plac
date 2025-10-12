@@ -30,7 +30,6 @@ class RegisterController extends Controller
             'eMail' => 'required|string|email|max:255|unique:users,eMail',
             'brojTelefona' => 'required|string|max:20',
             'lozinka' => ['required', 'confirmed', Password::min(8)->mixedCase()->numbers()],
-            'tipKorisnika' => 'required|in:admin,moderator,korisnik',
         ], [
             'korisnickoIme.required' => 'Korisničko ime je obavezno.',
             'korisnickoIme.unique' => 'Korisničko ime već postoji.',
@@ -41,8 +40,6 @@ class RegisterController extends Controller
             'lozinka.required' => 'Lozinka je obavezna.',
             'lozinka.confirmed' => 'Potvrda lozinke se ne poklapa.',
             'lozinka.min' => 'Lozinka mora imati najmanje 8 karaktera.',
-            'tipKorisnika.required' => 'Tip korisnika je obavezan.',
-            'tipKorisnika.in' => 'Tip korisnika nije validan.',
         ]);
 
         if ($validator->fails()) {
@@ -56,12 +53,12 @@ class RegisterController extends Controller
             'eMail' => $request->eMail,
             'brojTelefona' => $request->brojTelefona,
             'lozinka' => Hash::make($request->lozinka),
-            'tipKorisnika' => $request->tipKorisnika,
+            'tipKorisnika' => 'korisnik',
         ]);
 
         Auth::login($user);
 
-        return redirect()->route('dashboard')
-            ->with('success', 'Uspešno ste se registrovani! Dobrodošli!');
+        return redirect()->route('home')
+            ->with('success', 'Uspešno ste registrovani! Dobrodošli!');
     }
 }

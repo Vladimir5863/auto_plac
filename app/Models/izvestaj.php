@@ -21,6 +21,7 @@ class izvestaj extends Model
     ];
 
     public function oglasi() {
-        return $this->belongsToMany(Oglas::class, 'izvestaj_oglas', 'izvestajID', 'oglasID');
+        return $this->belongsToMany(Oglas::class, 'izvestaj_oglas', 'izvestajID', 'oglasID')
+            ->withPivot('tip');
     }
 }

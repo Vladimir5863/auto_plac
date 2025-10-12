@@ -31,7 +31,7 @@ class oglas extends Model
     }
 
     public function uplate() {
-        return $this->hasMany(Uplata::class, 'oglasID');
+        return $this->hasMany(Uplata::class, 'toOglasID');
     }
 
     public function izvestaji() {

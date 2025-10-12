@@ -13,14 +13,26 @@ return new class extends Migration
     {
         Schema::create('uplata', function (Blueprint $table) {
             $table->id('uplataID');
-            $table->unsignedBigInteger('korisnikID');
-            $table->unsignedBigInteger('oglasID');
-            $table->date('datumUplate');
-            $table->double('iznos');
+            // sekundarni ključevi (svi nullable): ko plaća, kome ide, za koji oglas
+            $table->unsignedBigInteger('fromUserID')->nullable();
+            $table->unsignedBigInteger('toUserID')->nullable();
+            $table->unsignedBigInteger('toOglasID')->nullable();
+
+            $table->dateTime('datumUplate');
+            $table->decimal('iznos', 12, 2);
+            // tip: wallet (dopuna novčanika), featured (isticanje oglasa), purchase (kupovina vozila)
+            $table->string('tip', 20)->default('wallet');
+
             $table->timestamps();
-            
-            $table->foreign('korisnikID')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('oglasID')->references('oglasID')->on('oglas')->onDelete('cascade');
+
+            // indeksi
+            $table->index(['datumUplate']);
+            $table->index(['tip']);
+
+            // spoljašnji ključevi
+            $table->foreign('fromUserID')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('toUserID')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('toOglasID')->references('oglasID')->on('oglas')->onDelete('set null');
         });
     }
 

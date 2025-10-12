@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('brojTelefona');
             $table->string('lozinka');
             $table->string('tipKorisnika');
+            $table->decimal('trenutniNovac', 12, 2)->default(0);
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

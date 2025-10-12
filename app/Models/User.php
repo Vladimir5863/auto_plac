@@ -24,6 +24,7 @@ class User extends Authenticatable
         'eMail',
         'brojTelefona',
         'tipKorisnika',
+        'trenutniNovac',
     ];
 
     /**
@@ -46,6 +47,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'lozinka' => 'hashed',
+            'trenutniNovac' => 'decimal:2',
         ];
     }
 
@@ -55,6 +57,6 @@ class User extends Authenticatable
     }
 
     public function uplate() {
-        return $this->hasMany(Uplata::class, 'korisnikID');
+        return $this->hasMany(Uplata::class, 'fromUserID');
     }
 }

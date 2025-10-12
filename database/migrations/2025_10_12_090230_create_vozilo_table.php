@@ -30,6 +30,7 @@ return new class extends Migration
             $table->boolean('ostecenje');
             $table->string('euroNorma');
             $table->integer('kubikaza');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

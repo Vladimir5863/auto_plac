@@ -11,16 +11,16 @@ class uplata extends Model
 
     protected $table = 'uplata';
     protected $primaryKey = 'uplataID';
-    protected $fillable = ['korisnikID', 'oglasID', 'datumUplate', 'iznos'];
+    protected $fillable = ['fromUserID', 'toUserID', 'toOglasID', 'datumUplate', 'iznos', 'tip'];
     protected $casts = [
         'datumUplate' => 'date',
         'iznos' => 'float'
     ];
-    public function korisnik() {
-        return $this->belongsTo(User::class, 'korisnikID');
-    }
+    // New relations
+    public function fromUser() { return $this->belongsTo(User::class, 'fromUserID'); }
+    public function toUser() { return $this->belongsTo(User::class, 'toUserID'); }
+    public function oglas() { return $this->belongsTo(Oglas::class, 'toOglasID'); }
 
-    public function oglas() {
-        return $this->belongsTo(Oglas::class, 'oglasID');
-    }
+    // Backward-compatibility for existing views using $payment->korisnik
+    public function korisnik() { return $this->fromUser(); }
 }

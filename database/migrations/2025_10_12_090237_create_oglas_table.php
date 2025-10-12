@@ -18,9 +18,9 @@ return new class extends Migration
             $table->float('cenaIstaknutogOglasa');
             $table->unsignedBigInteger('voziloID');
             $table->unsignedBigInteger('korisnikID');
-            $table->enum('statusOglasa', ['istaknutiOglas', 'standardniOglas', 'deaktiviranOglas', 'istekaoOglas']);
+            $table->enum('statusOglasa', ['istaknutiOglas', 'standardniOglas', 'deaktiviranOglas', 'istekaoOglas', 'prodatOglas']);
+            $table->softDeletes();
             $table->timestamps();
-            
             $table->foreign('voziloID')->references('voziloID')->on('vozilo')->onDelete('cascade');
             $table->foreign('korisnikID')->references('id')->on('users')->onDelete('cascade');
         });
