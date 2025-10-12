@@ -11,22 +11,39 @@
 
 Auto Plac is a Laravel web application for listing and selling vehicles. It offers a public vehicle catalog, authenticated user accounts for managing ads, and an admin panel for moderation, revenue, and reporting.
 
+## Auto Plac
+
+Auto Plac is a Laravel web application for listing and selling vehicles. It offers a public vehicle catalog, authenticated user accounts for managing ads, and an admin panel for moderation, revenue, and reporting.
+
 ### Features
-- Manage ads (standard and featured), with soft deletes across users/ads/vehicles
-- Vehicle management with photos (supports data URLs, storage paths, and public assets)
-- Payments tracking and period-based reports (snapshot table `izvestaj_oglas`)
-- Admin dashboard with real monthly revenue from featured payments (no dummy data)
-- Search, filtering, recent activity widgets, and summary statistics
+
+-   Manage ads (standard and featured), with soft deletes across users/ads/vehicles
+-   Vehicle management with photos (supports data URLs, storage paths, and public assets)
+-   Payments tracking and period-based reports (snapshot table `izvestaj_oglas`)
+-   Admin dashboard with real monthly revenue from featured payments (no dummy data)
+-   Search, filtering, recent activity widgets, and summary statistics
+
+### Features
+
+-   Manage ads (standard and featured), with soft deletes across users/ads/vehicles
+-   Vehicle management with photos (supports data URLs, storage paths, and public assets)
+-   Payments tracking and period-based reports (snapshot table `izvestaj_oglas`)
+-   Admin dashboard with real monthly revenue from featured payments (no dummy data)
+-   Search, filtering, recent activity widgets, and summary statistics
 
 ### Tech Stack
-- Laravel 12, PHP 8.2, MariaDB/MySQL
-- Blade, Bootstrap 5, Font Awesome, Chart.js
+
+### Tech Stack
+
+-   Laravel 12, PHP 8.2, MariaDB/MySQL
+-   Blade, Bootstrap 5, Font Awesome, Chart.js
 
 ### Requirements
-- PHP 8.2+
-- Composer
-- Node.js 18+ and npm
-- MariaDB/MySQL
+
+-   PHP 8.2+
+-   Composer
+-   Node.js 18+ and npm
+-   MariaDB/MySQL
 
 -
 
