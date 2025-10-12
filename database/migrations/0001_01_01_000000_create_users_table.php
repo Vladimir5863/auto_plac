@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('korisnickoIme')->unique();
-            $table->string('eMail')->unique();
-            $table->string('brojTelefona');
+            $table->string('korisnickoIme')->nullable();
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
             $table->string('lozinka');
-            $table->string('tipKorisnika');
-            $table->decimal('trenutniNovac', 12, 2)->default(0);
+            $table->string('brojTelefona')->nullable();
+            $table->string('tipKorisnika')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
@@ -50,3 +50,4 @@ return new class extends Migration
         Schema::dropIfExists('sessions');
     }
 };
+

@@ -265,7 +265,7 @@
 <script>
     // Monthly Revenue Chart (live data)
     const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
-    fetch('{{ route('admin.stats.monthly') }}', { headers: { 'Accept': 'application/json' }})
+    fetch('{{ route('admin.stats.monthly') }}',  { headers: { 'Accept': 'application/json' }})
         .then(r => r.json())
         .then(({ labels, data }) => {
             new Chart(monthlyCtx, {

@@ -5,7 +5,10 @@
 @section('content')
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2><i class="fas fa-credit-card me-2"></i>Moje uplate</h2>a>
+        <h2><i class="fas fa-credit-card me-2"></i>Moje uplate</h2>
+        <a href="{{ route('payments.create') }}" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Nova uplata
+        </a>
     </div>
 
     <div class="badge bg-primary fs-6 mb-3">Ukupno: €{{ number_format($totalAmount, 2, ',', '.') }}</div>

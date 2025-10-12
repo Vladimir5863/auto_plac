@@ -27,14 +27,14 @@ class oglas extends Model
     }
 
     public function vozilo() {
-        return $this->belongsTo(Vozilo::class, 'voziloID');
+        return $this->belongsTo(vozilo::class, 'voziloID');
     }
 
     public function uplate() {
-        return $this->hasMany(Uplata::class, 'toOglasID');
+        return $this->hasMany(uplata::class, 'toOglasID');
     }
 
     public function izvestaji() {
-        return $this->belongsToMany(Izvestaj::class, 'izvestaj_oglas', 'oglasID', 'izvestajID');
+        return $this->belongsToMany(izvestaj::class, 'izvestaj_oglas', 'oglasID', 'izvestajID');
     }
 }

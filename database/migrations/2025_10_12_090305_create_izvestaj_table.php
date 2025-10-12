@@ -16,8 +16,8 @@ return new class extends Migration
             $table->integer('brojUplata');
             $table->date('datumOd');
             $table->date('datumDo');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

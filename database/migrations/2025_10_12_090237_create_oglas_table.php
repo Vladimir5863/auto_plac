@@ -15,14 +15,24 @@ return new class extends Migration
             $table->id('oglasID');
             $table->date('datumKreiranja');
             $table->date('datumIsteka');
-            $table->float('cenaIstaknutogOglasa');
+            $table->float('cenaIstaknutogOglasa')->nullable();
+
             $table->unsignedBigInteger('voziloID');
             $table->unsignedBigInteger('korisnikID');
-            $table->enum('statusOglasa', ['istaknutiOglas', 'standardniOglas', 'deaktiviranOglas', 'istekaoOglas', 'prodatOglas']);
-            $table->softDeletes();
-            $table->timestamps();
+
+            $table->enum('statusOglasa', [
+                'istaknutiOglas',
+                'standardniOglas',
+                'deaktiviranOglas',
+                'istekaoOglas',
+                'prodatOglas'
+            ])->default('standardniOglas');
+
             $table->foreign('voziloID')->references('voziloID')->on('vozilo')->onDelete('cascade');
             $table->foreign('korisnikID')->references('id')->on('users')->onDelete('cascade');
+
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -34,3 +44,4 @@ return new class extends Migration
         Schema::dropIfExists('oglas');
     }
 };
+

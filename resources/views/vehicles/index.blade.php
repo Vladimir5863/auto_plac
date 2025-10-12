@@ -70,16 +70,16 @@
                                                 <img src="{!! $fi !!}" 
                                                      class="card-img-top" 
                                                      alt="{{ $featured->vozilo->marka }} {{ $featured->vozilo->model }}"
-                                                     style="height: 240px; object-fit: cover;">
+                                                     style="height: 200px; object-fit: cover;">
                                             @else
                                                 <img src="{{ Storage::url($fi) }}" 
                                                      class="card-img-top" 
                                                      alt="{{ $featured->vozilo->marka }} {{ $featured->vozilo->model }}"
-                                                     style="height: 240px; object-fit: cover;">
+                                                     style="height: 200px; object-fit: cover;">
                                             @endif
                                         @else
                                             <div class="card-img-top bg-light d-flex align-items-center justify-content-center" 
-                                                 style="height: 240px;">
+                                                 style="height: 200px;">
                                                 <i class="fas fa-car fa-3x text-muted"></i>
                                             </div>
                                         @endif
@@ -170,7 +170,7 @@
         
         <div class="row">
             @foreach($vehicles as $vehicle)
-                <div class="col-lg-3 col-md-4 mb-4">
+                <div class="col-lg-4 col-md-6 mb-4">
                     <div class="card h-100 shadow-sm">
                         <!-- Vehicle Image -->
                         <div class="position-relative">
@@ -180,16 +180,16 @@
                                     <img src="{!! $vi !!}" 
                                          class="card-img-top" 
                                          alt="{{ $vehicle->vozilo->marka }} {{ $vehicle->vozilo->model }}"
-                                         style="height: 160px; object-fit: cover;">
+                                         style="height: 200px; object-fit: cover;">
                                 @else
                                     <img src="{{ Storage::url($vi) }}" 
                                          class="card-img-top" 
                                          alt="{{ $vehicle->vozilo->marka }} {{ $vehicle->vozilo->model }}"
-                                         style="height: 160px; object-fit: cover;">
+                                         style="height: 200px; object-fit: cover;">
                                 @endif
                             @else
                                 <div class="card-img-top bg-light d-flex align-items-center justify-content-center" 
-                                     style="height: 160px;">
+                                     style="height: 200px;">
                                     <i class="fas fa-car fa-3x text-muted"></i>
                                 </div>
                             @endif
