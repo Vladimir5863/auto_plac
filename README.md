@@ -7,6 +7,77 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+## Auto Plac (project overview)
+
+Auto Plac je Laravel aplikacija za oglašavanje i prodaju vozila sa admin panelom, izveštajima i naplatom isticanja oglasa.
+
+### Glavne funkcionalnosti
+- Upravljanje oglasima (standardni i istaknuti)
+- Upravljanje vozilima i korisnicima (soft delete podrška)
+- Uplate i izveštaji po periodu (snapshot tabela `izvestaj_oglas`)
+- Admin dashboard sa realnim mesečnim prihodima (isticanja)
+
+### Tehnologije
+- Laravel 12, PHP 8.2, MariaDB/MySQL
+- Blade, Bootstrap 5, Font Awesome, Chart.js
+
+---
+
+## Setup i pokretanje
+
+1) Instaliraj zavisnosti
+```
+composer install
+npm install
+```
+
+2) Napravi `.env`
+```
+cp .env.example .env
+php artisan key:generate
+```
+Podesi DB kredencijale (MariaDB/MySQL).
+
+3) Migracije i seed (opciono seed)
+```
+php artisan migrate
+# ili ako želiš sve iz početka (briše tabele)
+# php artisan migrate:fresh
+```
+
+4) Storage symlink (za prikaz slika ako se čuvaju u storage)
+```
+php artisan storage:link
+```
+
+5) Pokretanje dev servera
+```
+php artisan serve
+```
+
+6) Asseti (ako koristiš Vite/Laravel Mix)
+```
+npm run dev
+# ili npm run build za produkciju
+```
+
+---
+
+## Korisne napomene
+
+- Uloge: polje `users.tipKorisnika` određuje ulogu (npr. `admin`). Provera uloga se radi preko tog polja.
+- Slike vozila: polje `vozilo.slike` je kastovano u niz i može sadržati:
+  - data URL (base64), apsolutne URL-ove, storage putanje (`storage/...`/`public/...`) ili public asset putanje. Za storage putanje obavezno je `php artisan storage:link`.
+- Mesečni prihodi (dashboard): endpoint `route('admin.stats.monthly')` vraća zbir svih uplata sa `tip = 'featured'` za poslednjih 12 meseci (prazni meseci = 0).
+- Izveštaji: tabela `izvestaj_oglas` ima PK `id` i jedinstveni indeks `io_uniq_izv_tip_ogl_kor_del` preko (`izvestajID`,`tip`,`oglasID`,`korisnikID`,`deleted_at`) kako bi soft-deleted redovi dozvolili reinsert.
+
+### Troubleshooting
+- "Foreign key constraint is incorrectly formed" (errno 150): proveri da su FK kolone istog tipa i unsigned, i da kolone koje se `SET NULL` ne učestvuju u primarnom ključu.
+- "Identifier name ... is too long (1059)": skrati ime indeksa (npr. `io_uniq_izv_tip_ogl_kor_del`).
+- Slike se ne vide: pokreni `php artisan storage:link` i proveri da vrednosti u `vozilo.slike` ukazuju na validne resurse.
+
+---
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
