@@ -7,126 +7,81 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## Auto Plac (project overview)
+## Auto Plac
 
-Auto Plac je Laravel aplikacija za oglašavanje i prodaju vozila sa admin panelom, izveštajima i naplatom isticanja oglasa.
+Auto Plac is a Laravel web application for listing and selling vehicles. It offers a public vehicle catalog, authenticated user accounts for managing ads, and an admin panel for moderation, revenue, and reporting.
 
-### Glavne funkcionalnosti
-- Upravljanje oglasima (standardni i istaknuti)
-- Upravljanje vozilima i korisnicima (soft delete podrška)
-- Uplate i izveštaji po periodu (snapshot tabela `izvestaj_oglas`)
-- Admin dashboard sa realnim mesečnim prihodima (isticanja)
+### Features
+- Manage ads (standard and featured), with soft deletes across users/ads/vehicles
+- Vehicle management with photos (supports data URLs, storage paths, and public assets)
+- Payments tracking and period-based reports (snapshot table `izvestaj_oglas`)
+- Admin dashboard with real monthly revenue from featured payments (no dummy data)
+- Search, filtering, recent activity widgets, and summary statistics
 
-### Tehnologije
+### Tech Stack
 - Laravel 12, PHP 8.2, MariaDB/MySQL
 - Blade, Bootstrap 5, Font Awesome, Chart.js
 
+### Requirements
+- PHP 8.2+
+- Composer
+- Node.js 18+ and npm
+- MariaDB/MySQL
+
 ---
 
-## Setup i pokretanje
+## Setup
 
-1) Instaliraj zavisnosti
+1) Clone and install dependencies
 ```
+git clone <your-repo-url> auto_plac
+cd auto_plac
 composer install
 npm install
 ```
 
-2) Napravi `.env`
+2) Environment
 ```
 cp .env.example .env
 php artisan key:generate
 ```
-Podesi DB kredencijale (MariaDB/MySQL).
+Edit `.env` and set your database credentials (MariaDB/MySQL).
 
-3) Migracije i seed (opciono seed)
+3) Database migrations
 ```
 php artisan migrate
-# ili ako želiš sve iz početka (briše tabele)
+# or to reset from scratch (DROPS tables)
 # php artisan migrate:fresh
 ```
 
-4) Storage symlink (za prikaz slika ako se čuvaju u storage)
+4) Storage symlink (needed if images are stored under storage/app/public)
 ```
 php artisan storage:link
 ```
 
-5) Pokretanje dev servera
+5) Run the app
 ```
 php artisan serve
 ```
 
-6) Asseti (ako koristiš Vite/Laravel Mix)
+6) Front-end assets (if applicable)
 ```
 npm run dev
-# ili npm run build za produkciju
+# or npm run build for production
 ```
 
 ---
 
-## Korisne napomene
-
-- Uloge: polje `users.tipKorisnika` određuje ulogu (npr. `admin`). Provera uloga se radi preko tog polja.
-- Slike vozila: polje `vozilo.slike` je kastovano u niz i može sadržati:
-  - data URL (base64), apsolutne URL-ove, storage putanje (`storage/...`/`public/...`) ili public asset putanje. Za storage putanje obavezno je `php artisan storage:link`.
-- Mesečni prihodi (dashboard): endpoint `route('admin.stats.monthly')` vraća zbir svih uplata sa `tip = 'featured'` za poslednjih 12 meseci (prazni meseci = 0).
-- Izveštaji: tabela `izvestaj_oglas` ima PK `id` i jedinstveni indeks `io_uniq_izv_tip_ogl_kor_del` preko (`izvestajID`,`tip`,`oglasID`,`korisnikID`,`deleted_at`) kako bi soft-deleted redovi dozvolili reinsert.
-
-### Troubleshooting
-- "Foreign key constraint is incorrectly formed" (errno 150): proveri da su FK kolone istog tipa i unsigned, i da kolone koje se `SET NULL` ne učestvuju u primarnom ključu.
-- "Identifier name ... is too long (1059)": skrati ime indeksa (npr. `io_uniq_izv_tip_ogl_kor_del`).
-- Slike se ne vide: pokreni `php artisan storage:link` i proveri da vrednosti u `vozilo.slike` ukazuju na validne resurse.
-
+## Troubleshooting
+- "Foreign key constraint is incorrectly formed" (errno 150): ensure FK column types match and that columns set to `NULL` on delete are not part of a primary key.
+- "Identifier name ... is too long (1059)": shorten index names (e.g., `io_uniq_izv_tip_ogl_kor_del`).
+- Images not visible: run `php artisan storage:link` and check that `vozilo.slike` contains valid paths or URLs.
+ 
 ---
 
-## About Laravel
+## Usage (overview)
+- Public catalog: browse and search vehicles via `vehicles.index`/`vehicles.search` and `vehicles.show`.
+- Users can create and manage their own ads under the Ads menu. Featured ads are charged and reflected in revenue.
+- Admin area (`/admin`): dashboard with monthly revenue chart, reports list, users and ads management, and quick actions.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
-
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
-
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Revenue logic: monthly revenue equals the sum of all payments with `tip = 'featured'` grouped by month (last 12 months), with zero-filled gaps.
