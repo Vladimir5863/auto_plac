@@ -16,11 +16,8 @@ class uplata extends Model
         'datumUplate' => 'date',
         'iznos' => 'float'
     ];
-    // New relations
-    public function fromUser() { return $this->belongsTo(User::class, 'fromUserID'); }
-    public function toUser() { return $this->belongsTo(User::class, 'toUserID'); }
     public function oglas() { return $this->belongsTo(Oglas::class, 'toOglasID'); }
 
     // Backward-compatibility for existing views using $payment->korisnik
-    public function korisnik() { return $this->fromUser(); }
+    public function korisnik() { return $this->belongsTo(User::class, 'fromUserID'); }
 }

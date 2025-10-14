@@ -7,7 +7,6 @@ use App\Models\Oglas;
 use App\Models\Uplata;
 use App\Models\Izvestaj;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
