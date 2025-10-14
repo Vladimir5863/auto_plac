@@ -295,7 +295,7 @@
                                     <option value="">Izaberite tip oglasa</option>
                                     @foreach($adStatuses as $status)
                                         <option value="{{ $status }}" {{ old('statusOglasa') == $status ? 'selected' : '' }}>
-                                            {{ $status === 'standardniOglas' ? 'Standardni oglas' : 'Istaknuti oglas (€150)' }}
+                                            {{ $status === 'standardniOglas' ? 'Standardni oglas' : 'Istaknuti oglas (€30)' }}
                                         </option>
                                     @endforeach
                                 </select>

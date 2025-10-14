@@ -144,6 +144,20 @@
                                             </div>
                                         </div>
 
+                                        <!-- Engine Power (kW) -->
+                                        <div class="row mb-3">
+                                            <div class="col-6">
+                                                <label class="form-label">Snaga od (kW)</label>
+                                                <input type="number" name="snagaKwOd" class="form-control" 
+                                                       value="{{ request('snagaKwOd') }}" min="0" step="0.1">
+                                            </div>
+                                            <div class="col-6">
+                                                <label class="form-label">Snaga do (kW)</label>
+                                                <input type="number" name="snagaKwDo" class="form-control" 
+                                                       value="{{ request('snagaKwDo') }}" min="0" step="0.1">
+                                            </div>
+                                        </div>
+
                                         <!-- Euro Standard -->
                                         <div class="mb-3">
                                             <label class="form-label">Euro norma</label>
@@ -166,6 +180,26 @@
                                                 <option value="Manuelni" {{ request('tipMenjaca') == 'Manuelni' ? 'selected' : '' }}>Manuelni</option>
                                                 <option value="Automatski" {{ request('tipMenjaca') == 'Automatski' ? 'selected' : '' }}>Automatski</option>
                                                 <option value="Poluautomatski" {{ request('tipMenjaca') == 'Poluautomatski' ? 'selected' : '' }}>Poluautomatski</option>
+                                            </select>
+                                        </div>
+
+                                        <!-- AC -->
+                                        <div class="mb-3">
+                                            <label class="form-label">Klima</label>
+                                            <select name="klima" class="form-select">
+                                                <option value="">Sve opcije</option>
+                                                <option value="Da" {{ request('klima') == 'Da' ? 'selected' : '' }}>Da</option>
+                                                <option value="Ne" {{ request('klima') == 'Ne' ? 'selected' : '' }}>Ne</option>
+                                            </select>
+                                        </div>
+
+                                        <!-- Damage -->
+                                        <div class="mb-3">
+                                            <label class="form-label">Oštećenje</label>
+                                            <select name="ostecenje" class="form-select">
+                                                <option value="">Sve opcije</option>
+                                                <option value="0" {{ request('ostecenje') === '0' ? 'selected' : '' }}>Ne</option>
+                                                <option value="1" {{ request('ostecenje') === '1' ? 'selected' : '' }}>Da</option>
                                             </select>
                                         </div>
                                     </div>
@@ -201,14 +235,6 @@
         <div class="col-md-9">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2>Rezultati pretrage</h2>
-                <div class="btn-group">
-                    <button class="btn btn-outline-secondary active" id="gridView">
-                        <i class="fas fa-th"></i>
-                    </button>
-                    <button class="btn btn-outline-secondary" id="listView">
-                        <i class="fas fa-list"></i>
-                    </button>
-                </div>
             </div>
 
             <!-- Results will be loaded here -->
@@ -269,18 +295,7 @@
         }
     });
 
-    // View toggle
-    document.getElementById('gridView').addEventListener('click', function() {
-        this.classList.add('active');
-        document.getElementById('listView').classList.remove('active');
-        // Add grid view logic
-    });
-
-    document.getElementById('listView').addEventListener('click', function() {
-        this.classList.add('active');
-        document.getElementById('gridView').classList.remove('active');
-        // Add list view logic
-    });
+    // View toggle removed per request
 </script>
 @endpush
 @endsection

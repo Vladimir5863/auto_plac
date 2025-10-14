@@ -14,10 +14,16 @@ class VehicleController extends Controller
      */
     public function search()
     {
-        $brands = Vozilo::select('marka')->distinct()->orderBy('marka')->pluck('marka');
+        // Use the same option sets as in AdController::create for consistency
+        $brands = [
+            'Audi','BMW','Mercedes-Benz','Volkswagen','Opel','Ford','Toyota','Honda','Nissan','Renault',
+            'Peugeot','Citroën','Škoda','SEAT','Hyundai','Kia','Mazda','Subaru','Volvo','Fiat',
+            'Alfa Romeo','Jeep','Land Rover','Porsche','Tesla','Dacia','Mitsubishi','Mini','Suzuki'
+        ];
+        // Populate initial models list from DB (optional); main list loads dynamically by brand
         $models = Vozilo::select('model')->distinct()->orderBy('model')->pluck('model');
-        $fuelTypes = Vozilo::select('tipGoriva')->distinct()->orderBy('tipGoriva')->pluck('tipGoriva');
-        $bodyTypes = Vozilo::select('tipKaroserije')->distinct()->orderBy('tipKaroserije')->pluck('tipKaroserije');
+        $fuelTypes = ['Benzin', 'Dizel', 'Hibrid', 'Električno', 'Gas'];
+        $bodyTypes = ['Limuzina', 'Hatchback', 'SUV', 'Karavan', 'Kupe', 'Kabriolet', 'Pickup'];
         
         return view('vehicles.search', compact('brands', 'models', 'fuelTypes', 'bodyTypes'));
     }
@@ -135,6 +141,31 @@ class VehicleController extends Controller
             });
         }
 
+        // Additional filters to match creation fields
+        if ($request->filled('snagaKwOd')) {
+            $query->whereHas('vozilo', function($q) use ($request) {
+                $q->where('snagaMotoraKW', '>=', $request->snagaKwOd);
+            });
+        }
+
+        if ($request->filled('snagaKwDo')) {
+            $query->whereHas('vozilo', function($q) use ($request) {
+                $q->where('snagaMotoraKW', '<=', $request->snagaKwDo);
+            });
+        }
+
+        if ($request->filled('klima')) {
+            $query->whereHas('vozilo', function($q) use ($request) {
+                $q->where('klima', $request->klima);
+            });
+        }
+
+        if ($request->filled('ostecenje')) {
+            $query->whereHas('vozilo', function($q) use ($request) {
+                $q->where('ostecenje', (bool) intval($request->ostecenje));
+            });
+        }
+
         // Sorting
         $sortBy = $request->get('sort', 'created_at');
         $sortDirection = $request->get('direction', 'desc');
@@ -154,11 +185,15 @@ class VehicleController extends Controller
 
         $vehicles = $query->paginate(12);
 
-        // Get filter options for the view
-        $brands = Vozilo::select('marka')->distinct()->orderBy('marka')->pluck('marka');
+        // Get filter options for the view - use the same sets as creation form
+        $brands = [
+            'Audi','BMW','Mercedes-Benz','Volkswagen','Opel','Ford','Toyota','Honda','Nissan','Renault',
+            'Peugeot','Citroën','Škoda','SEAT','Hyundai','Kia','Mazda','Subaru','Volvo','Fiat',
+            'Alfa Romeo','Jeep','Land Rover','Porsche','Tesla','Dacia','Mitsubishi','Mini','Suzuki'
+        ];
         $models = Vozilo::select('model')->distinct()->orderBy('model')->pluck('model');
-        $fuelTypes = Vozilo::select('tipGoriva')->distinct()->orderBy('tipGoriva')->pluck('tipGoriva');
-        $bodyTypes = Vozilo::select('tipKaroserije')->distinct()->orderBy('tipKaroserije')->pluck('tipKaroserije');
+        $fuelTypes = ['Benzin', 'Dizel', 'Hibrid', 'Električno', 'Gas'];
+        $bodyTypes = ['Limuzina', 'Hatchback', 'SUV', 'Karavan', 'Kupe', 'Kabriolet', 'Pickup'];
 
         if ($request->ajax()) {
             return view('vehicles.partials.results', compact('vehicles'));

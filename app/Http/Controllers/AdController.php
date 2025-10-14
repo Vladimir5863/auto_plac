@@ -92,15 +92,7 @@ class AdController extends Controller
                 ->withInput();
         }
 
-        // Wallet check for featured ad on create
-        if ($request->statusOglasa === 'istaknutiOglas') {
-            $required = 150.00;
-            if (Auth::user()->trenutniNovac < $required) {
-                return redirect()->back()
-                    ->withErrors(['statusOglasa' => 'Nemate dovoljno sredstava u novčaniku za istaknuti oglas (potrebno €150).'])
-                    ->withInput();
-            }
-        }
+        // Wallet check removed; payment will be handled via PaymentController flow
 
         // Handle image uploads: store as base64 strings in DB
         $imagePaths = [];
@@ -136,7 +128,7 @@ class AdController extends Controller
         ]);
 
         // Create ad
-        $cenaIstaknutogOglasa = $request->statusOglasa === 'istaknutiOglas' ? 150.00 : 0.00;
+        $cenaIstaknutogOglasa = $request->statusOglasa === 'istaknutiOglas' ? 30.00 : 0.00;
         $datumIsteka = now()->addDays(30);
         
         $oglas = Oglas::create([
@@ -147,6 +139,10 @@ class AdController extends Controller
             'korisnikID' => Auth::id(),
             'statusOglasa' => $request->statusOglasa,
         ]);
+
+        if ($request->statusOglasa === 'istaknutiOglas') {
+            return redirect()->route('ads.payment.create', $oglas->oglasID);
+        }
 
         return redirect()->route('ads.show', $oglas->oglasID)
             ->with('success', 'Oglas je uspešno kreiran!');
@@ -269,7 +265,7 @@ class AdController extends Controller
         ]);
 
         // Update ad
-        $cenaIstaknutogOglasa = $request->statusOglasa === 'istaknutiOglas' ? 150.00 : 0.00;
+        $cenaIstaknutogOglasa = $request->statusOglasa === 'istaknutiOglas' ? 30.00 : 0.00;
         
         $ad->update([
             'cenaIstaknutogOglasa' => $cenaIstaknutogOglasa,
