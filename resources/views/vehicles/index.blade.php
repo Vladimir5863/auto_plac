@@ -61,13 +61,18 @@
                     <div class="row">
                         @foreach($featuredAds as $featured)
                             <div class="col-lg-4 col-md-6 mb-4">
-                                <div class="card h-100 shadow-sm border-warning">
+                                <div class="card h-100 shadow-sm">
                                     <!-- Vehicle Image -->
                                     <div class="position-relative">
                                         @if($featured->vozilo->slike && count($featured->vozilo->slike) > 0)
                                             @php $fi = $featured->vozilo->slike[0]; @endphp
                                             @if(is_string($fi) && str_starts_with($fi, 'data:'))
                                                 <img src="{!! $fi !!}" 
+                                                     class="card-img-top" 
+                                                     alt="{{ $featured->vozilo->marka }} {{ $featured->vozilo->model }}"
+                                                     style="height: 200px; object-fit: cover;">
+                                            @elseif(is_string($fi) && (str_starts_with($fi, 'http://') || str_starts_with($fi, 'https://') || str_starts_with($fi, '/storage/')))
+                                                <img src="{{ $fi }}" 
                                                      class="card-img-top" 
                                                      alt="{{ $featured->vozilo->marka }} {{ $featured->vozilo->model }}"
                                                      style="height: 200px; object-fit: cover;">
@@ -84,22 +89,16 @@
                                             </div>
                                         @endif
                                         
-                                        <!-- Featured Badge -->
-                                        <span class="position-absolute top-0 end-0 badge bg-warning">
-                                            <i class="fas fa-star me-1"></i>Istaknut
-                                        </span>
-                                        
-                                        <!-- Price Badge (bottom-right) -->
-                                        <span class="position-absolute bottom-0 end-0 badge bg-primary fs-6 m-2">
-                                            €{{ number_format($featured->vozilo->cena, 0, ',', '.') }}
-                                        </span>
+                                        <!-- Top overlay: name (left), featured (center), price (right) -->
+                                        <div class="position-absolute top-0 start-0 w-100 d-flex align-items-start p-2" style="z-index:3;">
+                                            <span class="badge bg-dark bg-opacity-75 text-white text-truncate me-2 small" style="white-space: nowrap; max-width: 45%;">{{ $featured->vozilo->marka }} {{ $featured->vozilo->model }}</span>
+                                            <span class="badge bg-warning text-dark mx-auto flex-shrink-0"><i class="fas fa-star me-1"></i>Istaknut</span>
+                                            <span class="badge bg-primary ms-auto flex-shrink-0">€{{ number_format($featured->vozilo->cena, 0, ',', '.') }}</span>
+                                        </div>
                                     </div>
 
                                     <!-- Card Body -->
                                     <div class="card-body d-flex flex-column">
-                                        <h5 class="card-title">
-                                            {{ $featured->vozilo->marka }} {{ $featured->vozilo->model }}
-                                        </h5>
                                         
                                         <div class="row g-2 mb-3">
                                             <div class="col-6">
@@ -181,6 +180,11 @@
                                          class="card-img-top" 
                                          alt="{{ $vehicle->vozilo->marka }} {{ $vehicle->vozilo->model }}"
                                          style="height: 200px; object-fit: cover;">
+                                @elseif(is_string($vi) && (str_starts_with($vi, 'http://') || str_starts_with($vi, 'https://') || str_starts_with($vi, '/storage/')))
+                                    <img src="{{ $vi }}" 
+                                         class="card-img-top" 
+                                         alt="{{ $vehicle->vozilo->marka }} {{ $vehicle->vozilo->model }}"
+                                         style="height: 200px; object-fit: cover;">
                                 @else
                                     <img src="{{ Storage::url($vi) }}" 
                                          class="card-img-top" 
@@ -193,25 +197,19 @@
                                     <i class="fas fa-car fa-3x text-muted"></i>
                                 </div>
                             @endif
-                            
-                            <!-- Featured Badge -->
-                            @if($vehicle->statusOglasa === 'istaknutiOglas')
-                                <span class="position-absolute top-0 end-0 badge bg-warning">
-                                    <i class="fas fa-star me-1"></i>Istaknut
-                                </span>
-                            @endif
-                            
-                            <!-- Price Badge (bottom-right) -->
-                            <span class="position-absolute bottom-0 end-0 badge bg-primary fs-6 m-2">
-                                €{{ number_format($vehicle->vozilo->cena, 0, ',', '.') }}
-                            </span>
+
+                            <!-- Top overlay: name (left), featured (center if any), price (right) -->
+                            <div class="position-absolute top-0 start-0 w-100 d-flex align-items-start p-2" style="z-index:3;">
+                                <span class="badge bg-dark bg-opacity-75 text-white text-truncate me-2 small" style="white-space: nowrap; max-width: 45%;">{{ $vehicle->vozilo->marka }} {{ $vehicle->vozilo->model }}</span>
+                                @if($vehicle->statusOglasa === 'istaknutiOglas')
+                                    <span class="badge bg-warning text-dark mx-auto flex-shrink-0"><i class="fas a-star me-1"></i>Istaknut</span>
+                                @endif
+                                <span class="badge bg-primary ms-auto flex-shrink-0">€{{ number_format($vehicle->vozilo->cena, 0, ',', '.') }}</span>
+                            </div>
                         </div>
 
                         <!-- Card Body -->
                         <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">
-                                {{ $vehicle->vozilo->marka }} {{ $vehicle->vozilo->model }}
-                            </h5>
                             
                             <div class="row g-2 mb-3">
                                 <div class="col-6">

@@ -33,10 +33,7 @@ class VehicleController extends Controller
      */
     public function index(Request $request)
     {
-        // If no query params and not AJAX, show full filters page only for /vehicles (not homepage)
-        if (!$request->ajax() && count(array_filter($request->query())) === 0 && !$request->routeIs('home')) {
-            return redirect()->route('vehicles.search');
-        }
+        // Always show results list for /vehicles; homepage handled separately
 
         $query = Oglas::with(['vozilo', 'korisnik'])
             ->whereNotIn('statusOglasa', ['deaktiviranOglas', 'istekaoOglas', 'prodatOglas']);
@@ -199,7 +196,12 @@ class VehicleController extends Controller
             return view('vehicles.partials.results', compact('vehicles'));
         }
 
-        return view('vehicles.index', compact('vehicles', 'brands', 'models', 'fuelTypes', 'bodyTypes'));
+        // Non-AJAX: homepage shows homepage view; /vehicles shows search + results
+        if ($request->routeIs('home')) {
+            return view('vehicles.index', compact('vehicles', 'brands', 'models', 'fuelTypes', 'bodyTypes'));
+        }
+
+        return view('vehicles.search', compact('vehicles', 'brands', 'models', 'fuelTypes', 'bodyTypes'));
     }
 
     /**

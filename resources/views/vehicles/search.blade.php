@@ -239,11 +239,15 @@
 
             <!-- Results will be loaded here -->
             <div id="searchResults">
-                <div class="text-center py-5">
-                    <i class="fas fa-search fa-3x text-muted mb-3"></i>
-                    <h4>Pretražite vozila</h4>
-                    <p class="text-muted">Koristite filtere sa leve strane da pronađete vozilo koje tražite</p>
-                </div>
+                @isset($vehicles)
+                    @include('vehicles.partials.results', ['vehicles' => $vehicles])
+                @else
+                    <div class="text-center py-5">
+                        <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                        <h4>Pretražite vozila</h4>
+                        <p class="text-muted">Koristite filtere sa leve strane da pronađete vozilo koje tražite</p>
+                    </div>
+                @endisset
             </div>
         </div>
     </div>

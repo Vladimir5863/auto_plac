@@ -25,17 +25,22 @@ class RegisterController extends Controller
      */
     public function register(Request $request)
     {
+        // Normalize email field name from form (accept both 'email' and legacy 'eMail')
+        if (!$request->filled('email') && $request->filled('eMail')) {
+            $request->merge(['email' => $request->input('eMail')]);
+        }
+
         $validator = Validator::make($request->all(), [
             'korisnickoIme' => 'required|string|max:255|unique:users,korisnickoIme',
-            'eMail' => 'required|string|email|max:255|unique:users,eMail',
+            'email' => 'required|string|email|max:255|unique:users,email',
             'brojTelefona' => 'required|string|max:20',
             'lozinka' => ['required', 'confirmed', Password::min(8)->mixedCase()->numbers()],
         ], [
             'korisnickoIme.required' => 'Korisničko ime je obavezno.',
             'korisnickoIme.unique' => 'Korisničko ime već postoji.',
-            'eMail.required' => 'Email je obavezan.',
-            'eMail.email' => 'Email mora biti u ispravnom formatu.',
-            'eMail.unique' => 'Email već postoji.',
+            'email.required' => 'Email je obavezan.',
+            'email.email' => 'Email mora biti u ispravnom formatu.',
+            'email.unique' => 'Email već postoji.',
             'brojTelefona.required' => 'Broj telefona je obavezan.',
             'lozinka.required' => 'Lozinka je obavezna.',
             'lozinka.confirmed' => 'Potvrda lozinke se ne poklapa.',
@@ -50,7 +55,7 @@ class RegisterController extends Controller
 
         $user = User::create([
             'korisnickoIme' => $request->korisnickoIme,
-            'eMail' => $request->eMail,
+            'email' => $request->email,
             'brojTelefona' => $request->brojTelefona,
             'lozinka' => Hash::make($request->lozinka),
             'tipKorisnika' => 'korisnik',
